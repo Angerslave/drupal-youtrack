@@ -1,0 +1,10 @@
+services:
+  youtrack.connection:
+    class: Drupal\youtrack\API\ConnectionManager
+    arguments: ['@config.factory']
+  youtrack.projects:
+    class: Drupal\youtrack\API\ProjectsManager
+    arguments: ['@youtrack.connection']
+  youtrack.issues:
+    class: Drupal\youtrack\API\IssuesManager
+    arguments: ['@youtrack.connection']
