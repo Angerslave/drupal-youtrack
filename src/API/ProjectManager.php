@@ -6,7 +6,7 @@
 
 namespace Drupal\youtrack\API;
 
-class ProjectsManager {
+class ProjectManager {
   /**
    * Constructs a ProjectsManager object.
    *

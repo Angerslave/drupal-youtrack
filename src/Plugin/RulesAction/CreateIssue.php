@@ -9,7 +9,7 @@ namespace Drupal\youtrack\Plugin\RulesAction;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\rules\Core\RulesActionBase;
-use Drupal\youtrack\API\IssuesManager;
+use Drupal\youtrack\API\IssueManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -44,7 +44,7 @@ class CreateIssue extends RulesActionBase implements ContainerFactoryPluginInter
   /**
    * The issue manager used to create the issue.
    *
-   * @var \Drupal\youtrack\API\IssuesManager $youTrackIssuesManager
+   * @var \Drupal\youtrack\API\IssueManager $youTrackIssuesManager
    */
   protected $youTrackIssuesManager;
 
@@ -63,14 +63,14 @@ class CreateIssue extends RulesActionBase implements ContainerFactoryPluginInter
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('youtrack.issues')
+      $container->get('youtrack.issue')
     );
   }
 
   /**
    * Constructs the CreateIssue object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, IssuesManager $issues_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, IssueManager $issues_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->youTrackIssuesManager = $issues_manager;
   }

@@ -6,7 +6,7 @@
 
 namespace Drupal\youtrack\API;
 
-class IssuesManager {
+class IssueManager {
   /**
    * Constructs a IssuesManager object.
    *

@@ -10,7 +10,7 @@ namespace Drupal\youtrack_logger\Logger;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LogMessageParserInterface;
 use Drupal\Core\Logger\RfcLoggerTrait;
-use Drupal\youtrack\API\IssuesManager;
+use Drupal\youtrack\API\IssueManager;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -47,10 +47,10 @@ class YouTrack implements LoggerInterface {
    *   The configuration factory object.
    * @param \Drupal\Core\Logger\LogMessageParserInterface $parser
    *   The parser to use when extracting message variables.
-   * @param \Drupal\youtrack\API\IssuesManager            $issues_manager
+   * @param \Drupal\youtrack\API\IssueManager            $issues_manager
    *   YouTrack Issues Manager
    */
-  public function __construct(ConfigFactoryInterface $config_factory, LogMessageParserInterface $parser, IssuesManager $issues_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, LogMessageParserInterface $parser, IssueManager $issues_manager) {
     $this->config = $config_factory->getEditable('youtrack_logger.settings');
     $this->parser = $parser;
     $this->issuesManager = $issues_manager;
@@ -60,6 +60,11 @@ class YouTrack implements LoggerInterface {
    * {@inheritdoc}
    */
   public function log($level, $message, array $context = array()) {
+    // Skip self-logging messages.
+    if ($context['channel'] == 'youtrack_logger') {
+      return;
+    }
+
     // Check for log message severity to filter unnecessary ones.
     $severities = $this->config->get('severities', array());
 
@@ -90,7 +95,12 @@ class YouTrack implements LoggerInterface {
     $description = strtr($this->config->get('description_format'), $mapping);
 
     // Create an issue.
-    $this->issuesManager->createIssue($project, $summary, $description, $commands);
+    try {
+      $this->issuesManager->createIssue($project, $summary, $description, $commands);
+    }
+    catch (\YouTrack\Exception $e) {
+      watchdog_exception('youtrack_logger', $e);
+    }
   }
 
 }

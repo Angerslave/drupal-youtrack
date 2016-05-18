@@ -36,7 +36,7 @@ function youtrack_logger_form_youtrack_settings_alter(&$form, FormStateInterface
     '#title' => t('Project'),
     '#description' => t('YouTrack project to create the issue in.'),
     '#default_value' => $config->get('project'),
-    '#options' => \Drupal::service('youtrack.projects')->getAccessibleProjects(),
+    '#options' => \Drupal::service('youtrack.project')->getAccessibleProjects(),
   );
   $form['logger']['severities'] = array(
     '#type' => 'select',
